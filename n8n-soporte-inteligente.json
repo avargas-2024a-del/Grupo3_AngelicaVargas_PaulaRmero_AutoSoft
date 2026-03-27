@@ -1,0 +1,416 @@
+{
+  "name": "n8n-soporte-inteligente",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "soporte-inteligente",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -640,
+        -16
+      ],
+      "id": "14c7b807-3e14-4416-9b68-d0851420d765",
+      "name": "Webhook",
+      "webhookId": "245381e0-b5f5-4cf4-ad9f-34296232b379"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2de2a9ce-1c4f-40cc-8924-a2ea183e7862",
+              "leftValue": "={{ $json.body.email }}",
+              "rightValue": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -496,
+        0
+      ],
+      "id": "5e06258f-6e67-4cfc-9674-bc98fb178c13",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ticket_id\": \"={{ 'TK-' + $now.toFormat('yyyyMMdd') + '-' + Math.floor(Math.random() * 9000 + 1000) }}\",\n  \"fecha\": \"={{ $now.toFormat('dd/MM/yyyy HH:mm:ss') }}\",\n  \"nombre\": \"={{ $json.body.nombre }}\",\n  \"email\": \"={{ $json.body.email }}\",\n  \"asunto\": \"={{ $json.body.asunto || 'Sin asunto' }}\",\n  \"mensaje\": \"={{ $json.body.mensaje }}\",\n  \"prioridad\": \"={{ $json.body.prioridad || 'media' }}\",\n  \"ip_origen\": \"={{ $json.headers?.['x-forwarded-for'] || 'Local' }}\",\n  \"estado\": \"NUEVO\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -368,
+        -240
+      ],
+      "id": "92e63799-9e89-47fd-99a3-3c9579e93583",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "41827a00-9019-4192-a2c0-a6e246202e04"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        -240
+      ],
+      "id": "f7aa9102-9c0d-4ae7-bc96-8beac855a230",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        -240
+      ],
+      "id": "32c58f23-bfbc-4010-ad94-d1917ee4166e",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        -224
+      ],
+      "id": "8afe5bae-aa97-4c11-8d23-45cc96f129b7",
+      "name": "Send a message",
+      "webhookId": "af7d66ed-277d-4e57-ab60-1b14ea4b058f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nQN0tT2S1mRWHfix",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        176
+      ],
+      "id": "55eea8b2-0601-462b-88b1-248a794a101f",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GfiVZcAlTl9kbSvL",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        16
+      ],
+      "id": "36a625ac-f02c-4615-8771-fe8f237b099f",
+      "name": "Send a message1",
+      "webhookId": "715d4b3f-6a63-4c0f-9d6c-64a7a8f08dd1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nQN0tT2S1mRWHfix",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -240,
+        -240
+      ],
+      "id": "8b55a599-7e5f-4df8-b9f8-41c5db380d90",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        -80
+      ],
+      "id": "51443dbb-8d5a-4857-89f7-b0d78388ff2b",
+      "name": "Anthropic Chat Model"
+    },
+    {
+      "parameters": {
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        416,
+        -240
+      ],
+      "id": "88fb539b-ce13-41ac-acb0-b112c2ad8ea7",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        -112
+      ],
+      "id": "b4f32dcd-c677-49a5-ba8c-c0cbb1d20b7b",
+      "name": "Anthropic Chat Model1"
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nfor item in _items:\n  item[\"json\"][\"my_new_field\"] = 1\nreturn _items"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -240
+      ],
+      "id": "773ba4f7-193c-403b-8fec-aefe58510c14",
+      "name": "Code in Python"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in Python",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "993c4260-4d70-4140-b3a8-927351873519",
+  "meta": {
+    "instanceId": "1435c4e720336e214bdcd79e7871e926fe81f35c859cdec4f92b1ed00965b9f0"
+  },
+  "id": "BTNMuzvBylZ5nheA",
+  "tags": []
+}
