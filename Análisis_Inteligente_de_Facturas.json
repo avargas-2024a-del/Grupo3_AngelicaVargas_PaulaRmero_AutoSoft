@@ -1,0 +1,41 @@
+{
+  "name": "Análisis_Inteligente_de_Facturas",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "bearerAuth",
+        "path": "6303537d-537c-4904-9304-d9c752c24bd5"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "23c00614-4252-4667-ba9c-00ed44d63fbf",
+      "name": "MCP Server Trigger",
+      "webhookId": "6303537d-537c-4904-9304-d9c752c24bd5",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "VVOtU9tsnQAmaqtt",
+          "name": "Bearer Auth account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "97fc6c6b-abbd-4e69-8f87-22a4d445e982",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1435c4e720336e214bdcd79e7871e926fe81f35c859cdec4f92b1ed00965b9f0"
+  },
+  "id": "cQXrdhxMOcvtYKUo",
+  "tags": []
+}
