@@ -1,0 +1,94 @@
+{
+  "name": "Tool - Guardar Notion",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -384,
+        -80
+      ],
+      "id": "97a8840e-4ac8-42e0-834a-1eba2cb405cc",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nfor item in _items:\n  item[\"json\"][\"my_new_field\"] = 1\nreturn _items"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        -80
+      ],
+      "id": "fc3bb7a9-4cd2-4bd4-9eb7-2302b9a8be72",
+      "name": "Code in Python"
+    },
+    {
+      "parameters": {
+        "resource": "block",
+        "blockId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        -80
+      ],
+      "id": "14a0aa22-1f87-4089-9ef6-1ffcb05b8656",
+      "name": "Append a block",
+      "credentials": {
+        "notionApi": {
+          "id": "5d2LlTpIxb9a7ODT",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code in Python",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python": {
+      "main": [
+        [
+          {
+            "node": "Append a block",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2f0d5093-3027-48dd-8ae4-f0948cf2c09d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1435c4e720336e214bdcd79e7871e926fe81f35c859cdec4f92b1ed00965b9f0"
+  },
+  "id": "TPTR3yKgHuy8LWzr",
+  "tags": []
+}
